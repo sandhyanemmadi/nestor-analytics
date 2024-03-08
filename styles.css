@@ -1,0 +1,47 @@
+/* CSS for tabs */
+    .tab {
+        display: inline-block;
+        padding: 8px 16px;
+        cursor: pointer;
+        background-color: #f2f2f2;
+        border: 1px solid #ccc;
+        border-top-left-radius: 5px;
+        border-top-right-radius: 5px;
+        margin-right: -1px;
+    }
+
+    .tab.active {
+        background-color: #fff;
+    }
+
+    .tab:hover {
+        background-color: #eaeaea;
+    }
+
+    .tab-close {
+        cursor: pointer;
+        float: right;
+        margin-left: 8px;
+    }
+
+    /* CSS for content */
+    .content {
+        border: 1px solid #ccc;
+        padding: 10px;
+        border-top: none;
+    }
+
+    /* CSS for iframe */
+    .iframe-container {
+        position: relative;
+        overflow: hidden;
+        padding-top: 56.25%; /* 16:9 aspect ratio */
+    }
+
+    .iframe-container iframe {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+    }

@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dynamic Tabs</title>
+  <style>
+    /* CSS styles for tabs and content */
+    .tab {
+      display: inline-block;
+      padding: 10px;
+      cursor: pointer;
+      background-color: lightgray;
+      border: 1px solid gray;
+      border-top-left-radius: 5px;
+      border-top-right-radius: 5px;
+    }
+
+    .tab.active {
+      background-color: white;
+    }
+
+    .tab-close {
+      cursor: pointer;
+      float: right;
+      padding: 5px;
+    }
+
+    .content {
+      display: none;
+    }
+
+    .content.active {
+      display: block;
+    }
+
+    iframe {
+      width: 100%;
+      height: 300px;
+      border: none;
+    }
+  </style>
+</head>
+<body>
+  <div id="tabs">
+    <button id="add-tab">+</button>
+  </div>
+  <div id="tab-content">
+    <div class="content active">
+      <input type="text" id="url-input" placeholder="Enter URL">
+      <button id="load">Load</button>
+      <iframe id="frame"></iframe>
+    </div>
+  </div>
+
+  <script>
+    // Model
+    let tabs = [];
+
+    // View
+    const tabView = {
+      renderTabs: function() {
+        const tabContainer = document.getElementById('tabs');
+        tabContainer.innerHTML = '';
+        tabs.forEach((tab, index) => {
+          const tabElement = document.createElement('div');
+          tabElement.classList.add('tab');
+          if (index === controller.getCurrentTabIndex()) {
+            tabElement.classList.add('active');
+          }
+          tabElement.textContent = tab.title;
+          tabElement.addEventListener('click', () => controller.switchTab(index));
+          tabContainer.appendChild(tabElement);
+          const closeButton = document.createElement('span');
+          closeButton.classList.add('tab-close');
+          closeButton.textContent = 'x';
+          closeButton.addEventListener('click', (event) => {
+            event.stopPropagation();
+            controller.closeTab(index);
+          });
+          tabElement.appendChild(closeButton);
+        });
+      },
+
+      renderContent: function(url) {
+        document.getElementById('frame').src = url;
+      }
+    };
+
+    // Controller
+    const controller = {
+      addTab: function() {
+        const newTab = { title: 'New Tab', url: '' };
+        tabs.push(newTab);
+        this.render();
+      },
+
+      closeTab: function(index) {
+        tabs.splice(index, 1);
+        this.render();
+      },
+
+      switchTab: function(index) {
+        this.render();
+      },
+
+      getCurrentTabIndex: function() {
+        return tabs.length - 1;
+      },
+
+      render: function() {
+        tabView.renderTabs();
+        const currentIndex = this.getCurrentTabIndex();
+        tabView.renderContent(tabs[currentIndex].url);
+      },
+
+      init: function() {
+        document.getElementById('add-tab').addEventListener('click', () => this.addTab());
+        document.getElementById('load').addEventListener('click', () => {
+          const url = document.getElementById('url-input').value;
+          tabs[this.getCurrentTabIndex()].url = url;
+          this.render();
+        });
+        this.render();
+      }
+    };
+
+    controller.init();
+  </script>
+</body>
+</html>
